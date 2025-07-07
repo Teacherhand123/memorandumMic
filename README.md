@@ -4,6 +4,7 @@
 这是一个基于go的微服务项目，包含RabbitMQ消息队列，Gin框架，MySQL等数据库等常用组件
 
 ## 目录结构
+```
 |——app
 |   |——gateway
 |   |       |——cmd gin网关服务启动
@@ -53,23 +54,29 @@
 |
 |——types 一些特定JSON格式要使用
 |——daocker-compose.yml
+```.
 
+```go
 ## 依赖库
 go-micro.dev/v4 v4.11.0
 google.golang.org/protobuf v1.36.6
 gopkg.in/ini.v1 v1.67.0
 gorm.io/driver/mysql v1.6.0
 gorm.io/gorm v1.30.0
+```.
 
 ### 如何通过proto生成代码
+```cmd
 protoc -I ./idl 文件名.proto --micro_out ./idl/pb --go_out=./idl/pb
 protoc-go-inject-tag -input ./idl/pb/文件名.pb.go # 将注解写入 文件名.pb.go文件
+```.
 
 ### 为什么要保证Srv只创建一次？
 TaskSrv 有可能放到 HTTP 接口里也用、或者测试也用、或者脚本也用，多个 goroutine 并发去拿 GetTaskSrv()。
 
 ### 如何启动一个 rpcService 服务，然后把它注册到 etcd，别的服务就能通过 etcd 找到它并调用它暴露的接口
 ex:
+```go
 // RPC 服务
 func main() {
 	config.Init()
@@ -99,11 +106,13 @@ func loadingSrcipt() {
 	ctx := context.Background()
 	go script.TaskCreateSync(ctx)
 }
+```.
 
 ### 如何初始化好所有要远程调用的 RPC 客户端代理，帮你自动连接到已注册的远程服务。
 前端 (浏览器, Postman) --> API 网关 (HTTP) --> RPC 客户端 (InitRPC) --> 后端 RPC 服务
 
 ex: 
+```go
 package rpc
 
 import (
@@ -127,3 +136,4 @@ func InitRPC() {
 	UserService = userService
 	TaskService = taskService
 }
+```.
