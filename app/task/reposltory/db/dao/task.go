@@ -23,8 +23,14 @@ type TaskDao struct {
 // 灵活性较差，不适合高并发和独立请求场景。
 func NewTaskDao(ctx context.Context) *TaskDao {
 	if ctx == nil {
+		// 一个最基础、永远不会超时/取消/带值的 context
 		ctx = context.Background()
 	}
+
+	// 在 Go 里 context.Context 传递的是：
+	// 超时（比如数据库超时、HTTP 超时）
+	// 取消信号（比如用户主动断开、父任务结束）
+	// 上下文值（比如把用户 ID、trace ID 放进上下文）
 	return &TaskDao{NewDBClinet(ctx)}
 }
 

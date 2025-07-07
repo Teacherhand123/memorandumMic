@@ -19,6 +19,9 @@ func SendMessage2MQ(body []byte) (err error) {
 	// false oWait（不等待）。为 true 时，不等待服务器响应，直接返回。这里为 false，表示要等待服务器确认队列已声明。
 	// nil rgs（额外参数）。可以设置一些扩展参数，这里为 nil，表示没有额外参数。
 	q, _ := ch.QueueDeclare(consts.RabbitMqTaskQueue, true, false, false, false, nil)
+	// ch.Publish(exchange, key, mandatory, immediate, Publishing{})
+	// exchange 交换机名称, key 队列名, mandatory 找不到队列是否抛弃 false 丢弃, immediate 找不到活跃消费者就退出消息
+	// amqp.Persistent 持久化，RabbitMQ写到磁盘 JSON格式
 	err = ch.Publish("", q.Name, false, false, amqp.Publishing{
 		DeliveryMode: amqp.Persistent,
 		ContentType:  "application/json",

@@ -18,7 +18,9 @@ type TaskSrv struct {
 }
 
 var TaskSrvIns *TaskSrv
-var TaskSrvOnce sync.Once
+
+// 你后面把 TaskSrv 放到 HTTP 接口里也用、或者测试也用、或者脚本也用，多个 goroutine 并发去拿 GetTaskSrv()。
+var TaskSrvOnce sync.Once // 性能消耗极低
 
 // 懒汉式单例模式 lazy-loading --> 饿汉式
 // GetTaskSrv 方法：
@@ -118,7 +120,7 @@ func (t *TaskSrv) UpdateTask(ctx context.Context, req *pb.TaskRequest, resp *pb.
 func (t *TaskSrv) DeleteTask(ctx context.Context, req *pb.TaskRequest, resp *pb.TaskDetailResponse) (err error) {
 	resp.Code = e.Success
 	err = dao.NewTaskDao(ctx).DeleteTask(req.Id, req.Uid)
-	r := &model.Task{}
+	// r := &model.Task{}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		resp.Code = e.Error
@@ -129,7 +131,7 @@ func (t *TaskSrv) DeleteTask(ctx context.Context, req *pb.TaskRequest, resp *pb.
 		return
 	}
 
-	resp.TaskDetail = BuildTask(r)
+	// resp.TaskDetail = BuildTask(r)
 	return
 }
 
