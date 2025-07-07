@@ -4,7 +4,7 @@
 这是一个基于go的微服务项目，包含RabbitMQ消息队列，Gin框架，MySQL等数据库等常用组件
 
 ## 目录结构
-```
+```cmd
 |——app
 |   |——gateway
 |   |       |——cmd gin网关服务启动
