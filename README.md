@@ -3,9 +3,9 @@
 ## 项目简介
 这是一个基于go的微服务项目，包含RabbitMQ消息队列，Gin框架，MySQL等数据库等常用组件
 
-```markdown
 ## 目录结构
 
+```text
 - app
   - gateway
     - cmd: Gin 网关服务入口
@@ -45,6 +45,7 @@
   - jwt: JWT 鉴权
 - types: JSON 定义
 - docker-compose.yml: 一键启动
+```
 
 ```go
 ## 依赖库
@@ -53,13 +54,13 @@ google.golang.org/protobuf v1.36.6
 gopkg.in/ini.v1 v1.67.0
 gorm.io/driver/mysql v1.6.0
 gorm.io/gorm v1.30.0
-```.
+```
 
 ### 如何通过proto生成代码
 ```cmd
 protoc -I ./idl 文件名.proto --micro_out ./idl/pb --go_out=./idl/pb
 protoc-go-inject-tag -input ./idl/pb/文件名.pb.go # 将注解写入 文件名.pb.go文件
-```.
+```
 
 ### 为什么要保证Srv只创建一次？
 TaskSrv 有可能放到 HTTP 接口里也用、或者测试也用、或者脚本也用，多个 goroutine 并发去拿 GetTaskSrv()。
@@ -96,7 +97,7 @@ func loadingSrcipt() {
 	ctx := context.Background()
 	go script.TaskCreateSync(ctx)
 }
-```.
+```
 
 ### 如何初始化好所有要远程调用的 RPC 客户端代理，帮你自动连接到已注册的远程服务。
 前端 (浏览器, Postman) --> API 网关 (HTTP) --> RPC 客户端 (InitRPC) --> 后端 RPC 服务
@@ -126,4 +127,4 @@ func InitRPC() {
 	UserService = userService
 	TaskService = taskService
 }
-```.
+```
