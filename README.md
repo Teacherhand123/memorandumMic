@@ -4,47 +4,56 @@
 这是一个基于go的微服务项目，包含RabbitMQ消息队列，Gin框架，MySQL等数据库等常用组件
 
 ## 目录结构
-
 ```text
-- app
-  - gateway
-    - cmd: Gin 网关服务入口
-    - http: 连接后端 RPC
-    - middleware: 中间件
-    - router: 路由
-    - rpc: 初始化 RPC 客户端
-    - warppers: 暂未使用
-  - task
-    - cmd: task 服务入口
-    - repository
-      - db
-        - dao: 数据库 CURD
-        - model: 表模型
-      - mq
-        - task: 消费者监听
-        - InitRabbitMQ: 初始化 RabbitMQ
-      - script
-        - rabbitMq: 脚本长时间监听
-      - service: 业务逻辑
-  - user
-    - cmd: user 服务入口
-    - repository
-      - db
-        - dao: 数据库 CURD
-        - model: 表模型
-      - service: 业务逻辑
-- config: 配置文件
-- consts: 全局常量
-- idl
-  - pb: Proto 生成代码
-  - proto: Proto 定义
-- pkg
-  - ctl
-    - user_info: JWT 与 Context
-  - e: 错误码
-  - jwt: JWT 鉴权
-- types: JSON 定义
-- docker-compose.yml: 一键启动
+|——app
+|   |——gateway
+|   |       |——cmd gin网关服务启动
+|   |       |——http 用于连接rpc服务
+|   |       |——middleware 中间件
+|   |       |——router 路由
+|   |       |——rpc 初始化服务客户端 供http调用
+|   |       |——warppers 目前没用
+|   |
+|   |——task
+|   |   |——cmd task服务函数
+|   |   |——reposltory
+|   |           |——db
+|   |           |   |——dao 数据库初始化，上传表结构，数据库CURD操作
+|   |           |   |——model 表模型
+|   |           |
+|   |           |——mq
+|   |           |   |——task 运行RunTaskService 监听消费者
+|   |           |   |——InitRabbitMQ 初始化Rabbit 创建消费者，产生者
+|   |           |
+|   |           |——script
+|   |           |   |——rabbitMq脚本 一直监听
+|   |           |
+|   |           |——service 写数据库的逻辑，函数跟着taskService.pb.micro.go
+|   |
+|   |——user
+|       |——cmd user服务主函数
+|       |——reposltory
+|               |——db
+|               |   |——dao 数据库初始化，上传表结构，数据库CURD操作
+|               |   |——model 表模型
+|               |
+|               |——service 写数据库的逻辑，函数跟着userService.pb.micro.go
+|
+|——config 配置使用
+|——consts 存储一些属性，如：rabbitMq的队列名
+|——dil
+|   |——pb 通过proto文件生成的代码
+|   |——proto文件 定义request，response，函数
+|
+|——pkg
+|   |——ctl 定义响应类型
+|   |   |——user_info 将claims的client放给gin.request.context中
+|   |
+|   |——e 错误代码
+|   |——jwt 鉴定
+|
+|——types 一些特定JSON格式要使用
+|——daocker-compose.yml
 ```
 
 ```go
